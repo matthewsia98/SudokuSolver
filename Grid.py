@@ -16,7 +16,7 @@ class Grid:
                       [Tile(), Tile(), Tile(), Tile(), Tile(), Tile(), Tile(), Tile(), Tile()],
                       [Tile(), Tile(), Tile(), Tile(), Tile(), Tile(), Tile(), Tile(), Tile()],
                       [Tile(), Tile(), Tile(), Tile(), Tile(), Tile(), Tile(), Tile(), Tile()]]
-
+        self.active_tile = None
         width = w.get_width() // 9
 
         for i in range(len(self.board)):
@@ -57,10 +57,13 @@ class Grid:
             for j in range(len(self.board)):
                 if self.board[i][j].rect.collidepoint(mpos):
                     tile = self.board[i][j]
-                    tile.is_active = not tile.is_active
+                    if self.active_tile is tile or self.active_tile is None:
+                        tile.is_active = not tile.is_active
+                        self.active_tile = None
                     input_box = pygame.Rect(5 + j*(self.w.get_width()-10)//9, 5 + i*(self.w.get_width()-10)//9, tile.size, tile.size)
 
                     if tile.is_active:
+                        self.active_tile = tile
                         tile.color = tile.ACTIVE_COLOR
                         pygame.draw.rect(self.w, tile.color, input_box, 1)
                     else:
@@ -68,8 +71,6 @@ class Grid:
                         pygame.draw.rect(self.w, tile.color, input_box, 1)
 
                     pygame.display.update()
-                    #print(i+1, j+1)
-                    #print(tile.rect.x, tile.rect.y)
                     return tile
 
     def get_board(self):
@@ -88,3 +89,11 @@ class Grid:
                 result[i].append(tile.number)
 
         return result
+
+    def has_active_tile(self):
+        for i in range(len(self.board)):
+            for j in range(len(self.board)):
+                if self.board[i][j].is_active:
+                    return True
+
+        return False

@@ -36,7 +36,6 @@ while run:
             tile = g.tile_clicked(mouse_pos)
         elif event.type == pygame.KEYDOWN:
             w.fill((255, 255, 255))
-
             if tile.is_active:
                 if event.key == pygame.K_BACKSPACE:
                     tile.set_number(0)
