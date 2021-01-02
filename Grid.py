@@ -3,7 +3,7 @@ from Tile import Tile
 
 
 class Grid:
-    BORDER_WIDTH = 4
+    BORDER_WIDTH = 5
 
     def __init__(self, w):
         self.w = w
@@ -29,9 +29,9 @@ class Grid:
         pygame.draw.rect(self.w, (0, 0, 0), grid, self.BORDER_WIDTH)
 
         for i in range(3):
-            pygame.draw.line(self.w, (0, 0, 0), (5 + i*(self.w.get_width() - 10) // 3, 5), (5 + i*(self.w.get_width() - 10) // 3, self.w.get_height() - 5), self.BORDER_WIDTH)
+            pygame.draw.line(self.w, (0, 0, 0), (5 + i*(self.w.get_width() - 10) // 3, 5), (5 + i*(self.w.get_width() - 10) // 3, self.w.get_height() - 5), Grid.BORDER_WIDTH)
         for i in range(3):
-            pygame.draw.line(self.w, (0, 0, 0), (5, 5 + i*(self.w.get_height() - 10) // 3), (self.w.get_width() - 5, 5 + i*(self.w.get_height() - 10) // 3), self.BORDER_WIDTH)
+            pygame.draw.line(self.w, (0, 0, 0), (5, 5 + i*(self.w.get_height() - 10) // 3), (self.w.get_width() - 5, 5 + i*(self.w.get_height() - 10) // 3), Grid.BORDER_WIDTH)
         for i in range(9):
             pygame.draw.line(self.w, (0, 0, 0), (5 + i*(self.w.get_width() - 10)//9, 5), (5 + i*(self.w.get_width() - 10)//9, self.w.get_height() - 5))
         for j in range(9):
@@ -57,18 +57,25 @@ class Grid:
             for j in range(len(self.board)):
                 if self.board[i][j].rect.collidepoint(mpos):
                     tile = self.board[i][j]
-                    if self.active_tile is tile or self.active_tile is None:
+                    input_box = pygame.Rect(5 + j * (self.w.get_width() - 10) // 9, 5 + i * (self.w.get_width() - 10) // 9, tile.size, tile.size)
+                    if self.active_tile is None:
+                        self.active_tile = tile
+                        tile.is_active = not tile.is_active
+                    elif self.active_tile is tile:
                         tile.is_active = not tile.is_active
                         self.active_tile = None
-                    input_box = pygame.Rect(5 + j*(self.w.get_width()-10)//9, 5 + i*(self.w.get_width()-10)//9, tile.size, tile.size)
+                    elif self.active_tile is not tile:
+                        self.active_tile.color = tile.INACTIVE_COLOR
+                        pygame.draw.rect(self.w, tile.color, input_box, Grid.BORDER_WIDTH // 4)
+                        self.active_tile = tile
+                        tile.is_active = not tile.is_active
 
                     if tile.is_active:
-                        self.active_tile = tile
                         tile.color = tile.ACTIVE_COLOR
-                        pygame.draw.rect(self.w, tile.color, input_box, 1)
+                        pygame.draw.rect(self.w, tile.color, input_box, Grid.BORDER_WIDTH//4)
                     else:
                         tile.color = tile.INACTIVE_COLOR
-                        pygame.draw.rect(self.w, tile.color, input_box, 1)
+                        pygame.draw.rect(self.w, tile.color, input_box, Grid.BORDER_WIDTH//4)
 
                     pygame.display.update()
                     return tile

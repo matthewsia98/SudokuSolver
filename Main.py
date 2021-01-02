@@ -32,7 +32,7 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-        elif event.type == pygame.MOUSEBUTTONUP:
+        elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
             tile = g.tile_clicked(mouse_pos)
         elif event.type == pygame.KEYDOWN:
@@ -54,14 +54,13 @@ while run:
             if event.key == pygame.K_RETURN:
                 board = SudokuBoard()
                 board.set_board(g.get_board())
-                board.print_board()
                 board.solve()
                 for i in range(len(board.board)):
                     for j in range(len(board.board)):
                         tile = g.board[i][j]
                         tile.number = board.solutions[counter].board[i][j]
 
-            elif event.key == pygame.K_n:
+            elif event.key == pygame.K_SPACE:
                 counter += 1
                 if counter < len(board.solutions):
                     for i in range(len(board.board)):
@@ -77,10 +76,3 @@ while run:
                     pygame.display.update()
                     time.sleep(2)
                     run = False
-
-'''
-for i in range(len(g.board)):
-    print()
-    for j in range(len(g.board)):
-        print(g.board[i][j].number, end="")
-'''

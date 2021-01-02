@@ -9,6 +9,8 @@ class Tile:
         self.number = 0
         self.is_active = False
         self.color = self.INACTIVE_COLOR
+        self.size = 0
+        self.rect = None
 
     def set_number(self, n):
         self.number = n
