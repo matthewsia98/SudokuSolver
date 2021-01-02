@@ -68,6 +68,35 @@ class SudokuBoard:
 
         return True
 
+    def make_copy(self):
+        copy = SudokuBoard()
+        copy_board = [[],
+                      [],
+                      [],
+                      [],
+                      [],
+                      [],
+                      [],
+                      [],
+                      []]
+        for i in range(len(self.board)):
+            for j in range(len(self.board)):
+                copy_board[i].append(self.board[i][j])
+
+        copy.set_board(copy_board)
+        return copy
+
+    def is_solved(self):
+        result = True
+
+        for i in range(len(self.board)):
+            for j in range(len(self.board)):
+                num = self.board[i][j]
+                curr = (num != 0) and self.is_valid(num, (i, j))
+                result = result and curr
+
+        return result
+    '''
     # One Solution
     def solve(self):
         empty = self.find_empty()
@@ -86,7 +115,6 @@ class SudokuBoard:
     '''
     # Multiple Solutions
     def solve(self):
-        global solutions
         for i in range(len(self.board)):
             for j in range(len(self.board)):
                 if self.board[i][j] == 0:
@@ -96,16 +124,11 @@ class SudokuBoard:
                             if not self.solve():
                                 self.board[i][j] = 0
                     return
-        print("SOLUTION")
-        #self.print_board()
-        #print()
-        solution = SudokuBoard()
-        solution.set_board(self.board)
-        solution.print_board()
-        solutions.append(solution)
-        #input("\nAlternate Solution?\n")
-    '''
-'''
+
+        solution = self.make_copy()
+        self.solutions.append(solution)
+
+
 solutions = []
 board1 = [[0, 0, 0, 4, 0, 0, 1, 2, 0],
           [6, 0, 0, 0, 7, 5, 0, 0, 9],
@@ -132,8 +155,7 @@ print("ORIGINAL")
 b.print_board()
 print()
 b.solve()
-print()
-print(type(solutions))
-print(type(solutions[0]))
-solutions[0].print_board()
-'''
+for i in range(len(b.solutions)):
+    print("SOLUTION", i+1)
+    b.solutions[i].print_board()
+    print()

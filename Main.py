@@ -1,6 +1,7 @@
 import pygame
 from Grid import Grid
 from SudokuBoard import SudokuBoard
+import time
 
 
 # Constants
@@ -58,14 +59,25 @@ while run:
                 for i in range(len(board.board)):
                     for j in range(len(board.board)):
                         tile = g.board[i][j]
-                        tile.number = board.board[i][j]
-            '''
+                        tile.number = board.solutions[counter].board[i][j]
+
             elif event.key == pygame.K_n:
                 counter += 1
                 if counter < len(board.solutions):
-                    board.solutions[counter].print_board()
-                    print()
-            '''
+                    for i in range(len(board.board)):
+                        for j in range(len(board.board)):
+                            tile = g.board[i][j]
+                            tile.number = board.solutions[counter].board[i][j]
+                else:
+                    w.fill((255, 255, 255))
+                    game_over = font.render("No more solutions", True, (0, 0, 0))
+                    text_game_over = game_over.get_rect()
+                    text_game_over.center = (SCREENWIDTH//2, SCREENHEIGHT//2)
+                    w.blit(game_over, text_game_over)
+                    pygame.display.update()
+                    time.sleep(2)
+                    run = False
+
 '''
 for i in range(len(g.board)):
     print()
