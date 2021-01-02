@@ -1,16 +1,15 @@
 class SudokuBoard:
-    board = [[0, 0, 0, 0, 0, 0, 0, 0, 0],
-             [0, 0, 0, 0, 0, 0, 0, 0, 0],
-             [0, 0, 0, 0, 0, 0, 0, 0, 0],
-             [0, 0, 0, 0, 0, 0, 0, 0, 0],
-             [0, 0, 0, 0, 0, 0, 0, 0, 0],
-             [0, 0, 0, 0, 0, 0, 0, 0, 0],
-             [0, 0, 0, 0, 0, 0, 0, 0, 0],
-             [0, 0, 0, 0, 0, 0, 0, 0, 0],
-             [0, 0, 0, 0, 0, 0, 0, 0, 0]]
-
     def __init__(self):
-        pass
+        self.solutions = []
+        self.board = [[0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
     def clear_board(self):
         self.board = [[0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -22,9 +21,11 @@ class SudokuBoard:
                       [0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+        self.solutions = []
 
     def set_board(self, board):
         self.board = board
+        self.solutions = []
 
     def print_board(self):
         for i in range(len(self.board)):
@@ -66,7 +67,7 @@ class SudokuBoard:
                     return False
 
         return True
-    '''
+
     # One Solution
     def solve(self):
         empty = self.find_empty()
@@ -85,31 +86,54 @@ class SudokuBoard:
     '''
     # Multiple Solutions
     def solve(self):
+        global solutions
         for i in range(len(self.board)):
             for j in range(len(self.board)):
                 if self.board[i][j] == 0:
                     for num in range(1, 10):
                         if self.is_valid(num, (i, j)):
                             self.board[i][j] = num
-                            self.solve()
-                            self.board[i][j] = 0
+                            if not self.solve():
+                                self.board[i][j] = 0
                     return
-        self.print_board()
-        input("Alternate Solution?")
+        print("SOLUTION")
+        #self.print_board()
+        #print()
+        solution = SudokuBoard()
+        solution.set_board(self.board)
+        solution.print_board()
+        solutions.append(solution)
+        #input("\nAlternate Solution?\n")
+    '''
+'''
+solutions = []
+board1 = [[0, 0, 0, 4, 0, 0, 1, 2, 0],
+          [6, 0, 0, 0, 7, 5, 0, 0, 9],
+          [0, 0, 0, 6, 0, 1, 0, 7, 8],
+          [0, 0, 7, 0, 4, 0, 2, 6, 0],
+          [0, 0, 1, 0, 5, 0, 9, 3, 0],
+          [0, 0, 4, 0, 0, 0, 0, 0, 5],
+          [0, 7, 0, 3, 0, 0, 0, 1, 2],
+          [1, 2, 0, 0, 0, 7, 4, 0, 0],
+          [0, 4, 9, 2, 0, 6, 0, 0, 0]]
 
-
-board = [[7, 8, 0, 4, 0, 0, 1, 2, 0],
-         [6, 0, 0, 0, 7, 5, 0, 0, 9],
-         [0, 0, 0, 6, 0, 1, 0, 7, 8],
-         [0, 0, 7, 0, 4, 0, 2, 6, 0],
-         [0, 0, 1, 0, 5, 0, 9, 3, 0],
-         [9, 0, 4, 0, 6, 0, 0, 0, 5],
-         [0, 7, 0, 3, 0, 0, 0, 1, 2],
-         [1, 2, 0, 0, 0, 7, 4, 0, 0],
-         [0, 4, 9, 2, 0, 6, 0, 0, 7]]
+board2 = [[7, 8, 5, 4, 3, 9, 1, 2, 6],
+          [6, 1, 2, 8, 7, 5, 3, 4, 9],
+          [4, 9, 3, 6, 2, 1, 5, 7, 8],
+          [8, 5, 7, 9, 4, 3, 2, 6, 1],
+          [2, 6, 1, 7, 5, 8, 9, 3, 4],
+          [9, 3, 4, 1, 6, 2, 7, 8, 5],
+          [5, 7, 8, 3, 9, 4, 6, 1, 2],
+          [1, 2, 6, 5, 8, 7, 4, 9, 3],
+          [3, 4, 9, 2, 1, 6, 8, 5, 0]]
 b = SudokuBoard()
-b.set_board(board)
+b.set_board(board1)
+print("ORIGINAL")
 b.print_board()
-print("\n SOLVING \n")
+print()
 b.solve()
-
+print()
+print(type(solutions))
+print(type(solutions[0]))
+solutions[0].print_board()
+'''
