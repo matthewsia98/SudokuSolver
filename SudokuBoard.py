@@ -68,6 +68,16 @@ class SudokuBoard:
 
         return True
 
+    def is_valid_board(self):
+        result = True
+
+        for i in range(len(self.board)):
+            for j in range(len(self.board)):
+                if self.board[i][j] != 0:
+                    result = result and self.is_valid(self.board[i][j], (i, j))
+
+        return result
+
     def make_copy(self):
         copy = SudokuBoard()
         copy_board = [[],
@@ -149,4 +159,20 @@ board2 = [[7, 8, 5, 4, 3, 9, 1, 2, 6],
           [5, 7, 8, 3, 9, 4, 6, 1, 2],
           [1, 2, 6, 5, 8, 7, 4, 9, 3],
           [3, 4, 9, 2, 1, 6, 8, 5, 0]]
+
+board3 = [[1, 7, 4, 0, 6, 3, 0, 5, 2],
+          [2, 0, 5, 1, 7, 4, 0, 6, 3],
+          [3, 0, 6, 2, 0, 5, 1, 7, 4],
+          [4, 1, 7, 3, 0, 6, 2, 0, 5],
+          [5, 2, 0, 4, 1, 7, 3, 0, 6],
+          [6, 3, 0, 5, 2, 0, 4, 1, 7],
+          [7, 4, 1, 6, 3, 0, 5, 2, 0],
+          [0, 5, 2, 7, 4, 1, 6, 3, 0],
+          [0, 6, 3, 0, 5, 2, 7, 4, 1]]
+
+b = SudokuBoard()
+b.set_board(board3)
+print(b.is_valid_board())
+b.solve()
+print(len(b.solutions))
 '''

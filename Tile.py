@@ -18,6 +18,3 @@ class Tile:
     def set_rect(self, x, y, size):
         self.size = size
         self.rect = pygame.Rect(x, y, size, size)
-
-    def draw_number(self):
-        pass
