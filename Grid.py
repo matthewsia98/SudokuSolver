@@ -4,6 +4,7 @@ from Tile import Tile
 
 class Grid:
     BORDER_WIDTH = 5
+    SCREENWIDTH = 600
 
     def __init__(self, win, w):
         self.win = win
@@ -117,3 +118,13 @@ class Grid:
             for j in range(len(self.board)):
                 tile = self.board[i][j]
                 print(tile.number, end=" ")
+
+    def copy_grid(self):
+        copy = Grid(self.win, Grid.SCREENWIDTH)
+
+        for i in range(len(self.board)):
+            for j in range(len(self.board)):
+                tile = self.board[i][j]
+                copy.board[i][j].set_number(tile.number)
+
+        return copy

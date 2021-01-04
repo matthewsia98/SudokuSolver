@@ -25,16 +25,19 @@ font = pygame.font.SysFont("Arial", 22, True)
 # Menu Setup
 set_board = font.render("Set Board", True, (0, 0, 0))
 set_board_rect = set_board.get_rect()
-set_board_rect.center = ((SCREENWIDTH + TOTAL_SCREENWIDTH) // 2, SCREENHEIGHT // 5)
+set_board_rect.center = ((SCREENWIDTH + TOTAL_SCREENWIDTH) // 2, SCREENHEIGHT // 6)
 clear_board = font.render("Clear Board", True, (0, 0, 0))
 clear_board_rect = clear_board.get_rect()
-clear_board_rect.center = ((SCREENWIDTH + TOTAL_SCREENWIDTH) // 2, 2 * SCREENHEIGHT // 5)
+clear_board_rect.center = ((SCREENWIDTH + TOTAL_SCREENWIDTH) // 2, 2 * SCREENHEIGHT // 6)
+reset_board = font.render("Reset Board", True, (0, 0, 0))
+reset_board_rect = reset_board.get_rect()
+reset_board_rect.center = ((SCREENWIDTH + TOTAL_SCREENWIDTH) // 2, 3 * SCREENHEIGHT // 6)
 solve = font.render("Solve", True, (0, 0, 0))
 solve_rect = solve.get_rect()
-solve_rect.center = ((SCREENWIDTH + TOTAL_SCREENWIDTH) // 2, 3 * SCREENHEIGHT // 5)
+solve_rect.center = ((SCREENWIDTH + TOTAL_SCREENWIDTH) // 2, 4 * SCREENHEIGHT // 6)
 next_solution = font.render("Next Solution", True, (0, 0, 0))
 next_solution_rect = next_solution.get_rect()
-next_solution_rect.center = ((SCREENWIDTH + TOTAL_SCREENWIDTH) // 2, 4 * SCREENHEIGHT // 5)
+next_solution_rect.center = ((SCREENWIDTH + TOTAL_SCREENWIDTH) // 2, 5 * SCREENHEIGHT // 6)
 
 # Main Loop Variables Initialization
 user_input = ''
@@ -46,6 +49,7 @@ board = SudokuBoard()
 def draw_menu():
     w.blit(set_board, set_board_rect)
     w.blit(clear_board, clear_board_rect)
+    w.blit(reset_board, reset_board_rect)
     w.blit(solve, solve_rect)
     w.blit(next_solution, next_solution_rect)
 
@@ -62,8 +66,8 @@ while run:
             tile = g.tile_clicked(mouse_pos, SCREENWIDTH)
 
             if set_board_rect.collidepoint(mouse_pos):
+                copy = g.copy_grid()
                 board.set_board(g.get_board())
-                board.print_board()
                 if not board.is_valid_board():
                     not_valid = font.render("Invalid Board", True, (255, 0, 0))
                     not_valid_rect = not_valid.get_rect()
@@ -74,6 +78,11 @@ while run:
                     w.fill((255, 255, 255))
             elif clear_board_rect.collidepoint(mouse_pos):
                 g.clear_grid()
+                w.fill((255, 255, 255))
+                g.draw_grid(SCREENWIDTH, SCREENHEIGHT)
+                board.set_board(g.get_board())
+            elif reset_board_rect.collidepoint(mouse_pos):
+                g = copy
                 w.fill((255, 255, 255))
                 g.draw_grid(SCREENWIDTH, SCREENHEIGHT)
                 board.set_board(g.get_board())
