@@ -86,6 +86,7 @@ while run:
                 w.fill((255, 255, 255))
                 g.draw_grid(SCREENWIDTH, SCREENHEIGHT)
                 board.set_board(g.get_board())
+                board.solutions = []
             elif solve_rect.collidepoint(mouse_pos):
                 board.solve()
                 for i in range(len(board.board)):
