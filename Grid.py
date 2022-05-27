@@ -4,9 +4,10 @@ from Tile import Tile
 
 class Grid:
     BORDER_WIDTH = 5
-    SCREENWIDTH = 600
 
     def __init__(self, win, w):
+        import Main
+        Grid.SCREENWIDTH = Main.SCREENWIDTH
         self.win = win
         self.board = [[Tile(), Tile(), Tile(), Tile(), Tile(), Tile(), Tile(), Tile(), Tile()],
                       [Tile(), Tile(), Tile(), Tile(), Tile(), Tile(), Tile(), Tile(), Tile()],
@@ -51,7 +52,6 @@ class Grid:
                     self.win.blit(input_font, (input_box.x + tile.size//2 - 5, input_box.y + tile.size//2 - 10))
                 if tile.number == 0:
                     self.win.blit(empty_font, (input_box.x + tile.size//2 - 5, input_box.y + tile.size//2 - 10))
-        pygame.display.update()
 
     def tile_clicked(self, mpos, w):
         for i in range(len(self.board)):

@@ -106,9 +106,9 @@ class SudokuBoard:
                 result = result and curr
 
         return result
-    '''
+    
     # One Solution
-    def solve(self):
+    def solve_one(self):
         empty = self.find_empty()
 
         if not empty:
@@ -117,23 +117,25 @@ class SudokuBoard:
         for num in range(1, 10):
             if self.is_valid(num, (empty[0], empty[1])):
                 self.board[empty[0]][empty[1]] = num
-                if self.solve():
+                if self.solve_one():
+                    self.solutions.append(self.make_copy())
                     return True
                 self.board[empty[0]][empty[1]] = 0
-
+        
         return False
-    '''
+       
     # Multiple Solutions
-    def solve(self):
+    def solve_all(self):
         for i in range(len(self.board)):
             for j in range(len(self.board)):
                 if self.board[i][j] == 0:
                     for num in range(1, 10):
                         if self.is_valid(num, (i, j)):
                             self.board[i][j] = num
-                            if not self.solve():
-                                self.board[i][j] = 0
+                            for solution in self.solve_all():
+                                yield solution
+                            self.board[i][j] = 0
                     return
 
-        solution = self.make_copy()
-        self.solutions.append(solution)
+        yield self.make_copy()
+        

@@ -5,9 +5,9 @@ import time
 
 
 # Constants
-TOTAL_SCREENWIDTH = 800
-SCREENWIDTH = 600
-SCREENHEIGHT = 600
+TOTAL_SCREENWIDTH = 1000
+SCREENWIDTH = 800
+SCREENHEIGHT = 800
 BORDER_WIDTH = 4
 
 # Pygame Initialization
@@ -20,7 +20,7 @@ pygame.display.update()
 g = Grid(w, SCREENWIDTH)
 
 # Font Setup
-font = pygame.font.SysFont("Arial", 22, True)
+font = pygame.font.SysFont("Arial", 30, True)
 
 # Menu Setup
 set_board = font.render("Set Board", True, (0, 0, 0))
@@ -42,9 +42,8 @@ next_solution_rect.center = ((SCREENWIDTH + TOTAL_SCREENWIDTH) // 2, 5 * SCREENH
 # Main Loop Variables Initialization
 user_input = ''
 run = True
-counter = 0
 board = SudokuBoard()
-
+solutions = None
 
 def draw_menu():
     w.blit(set_board, set_board_rect)
@@ -52,11 +51,13 @@ def draw_menu():
     w.blit(reset_board, reset_board_rect)
     w.blit(solve, solve_rect)
     w.blit(next_solution, next_solution_rect)
-
+    
 
 while run:
-    g.draw_grid(SCREENWIDTH, SCREENHEIGHT)
+    w.fill((255, 255, 255))
     draw_menu()
+    g.draw_grid(SCREENWIDTH, SCREENHEIGHT)
+    pygame.display.update()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -80,29 +81,39 @@ while run:
                 g.clear_grid()
                 w.fill((255, 255, 255))
                 g.draw_grid(SCREENWIDTH, SCREENHEIGHT)
+                pygame.display.update()
                 board.set_board(g.get_board())
+                copy.print_grid()
+                print('\n', '-' * 100, '\n')
             elif reset_board_rect.collidepoint(mouse_pos):
-                g = copy
+                g = copy.copy_grid()
                 w.fill((255, 255, 255))
                 g.draw_grid(SCREENWIDTH, SCREENHEIGHT)
+                pygame.display.update()
                 board.set_board(g.get_board())
-                board.solutions = []
+                copy.print_grid()
+                print('\n', '-' * 100, '\n')
             elif solve_rect.collidepoint(mouse_pos):
-                board.solve()
+                solutions = board.solve_all()
+                solution = next(solutions)
                 for i in range(len(board.board)):
                     for j in range(len(board.board)):
                         tile = g.board[i][j]
-                        tile.number = board.solutions[counter].board[i][j]
+                        tile.number = solution.board[i][j]
+                g.draw_grid(SCREENWIDTH, SCREENHEIGHT)
+                time.sleep(2)
             elif next_solution_rect.collidepoint(mouse_pos):
-                counter += 1
-                if counter < len(board.solutions):
+                w.fill((255, 255, 255))
+                pygame.display.update()
+                try:
+                    solution = next(solutions)
                     for i in range(len(board.board)):
                         for j in range(len(board.board)):
                             tile = g.board[i][j]
-                            tile.number = board.solutions[counter].board[i][j]
-                    w.fill((255, 255, 255))
+                            tile.number = solution.board[i][j]
+
                     g.draw_grid(SCREENWIDTH, SCREENHEIGHT)
-                else:
+                except StopIteration:
                     no_solution = font.render("No more solutions", True, (255, 0, 0))
                     no_solution_rect = no_solution.get_rect()
                     no_solution_rect.center = (SCREENWIDTH // 2, SCREENHEIGHT // 2)
