@@ -18,6 +18,7 @@ pygame.display.update()
 
 # Grid Initialization
 g = Grid(w, SCREENWIDTH)
+copy = g.copy_grid()
 
 # Font Setup
 font = pygame.font.SysFont("Arial", 30, True)
@@ -83,16 +84,12 @@ while run:
                 g.draw_grid(SCREENWIDTH, SCREENHEIGHT)
                 pygame.display.update()
                 board.set_board(g.get_board())
-                copy.print_grid()
-                print('\n', '-' * 100, '\n')
             elif reset_board_rect.collidepoint(mouse_pos):
                 g = copy.copy_grid()
                 w.fill((255, 255, 255))
                 g.draw_grid(SCREENWIDTH, SCREENHEIGHT)
                 pygame.display.update()
                 board.set_board(g.get_board())
-                copy.print_grid()
-                print('\n', '-' * 100, '\n')
             elif solve_rect.collidepoint(mouse_pos):
                 solutions = board.solve_all()
                 solution = next(solutions)
