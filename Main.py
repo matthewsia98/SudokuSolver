@@ -44,7 +44,9 @@ next_solution_rect.center = ((SCREENWIDTH + TOTAL_SCREENWIDTH) // 2, 5 * SCREENH
 user_input = ''
 run = True
 board = SudokuBoard()
+tile = None
 solutions = None
+
 
 def draw_menu():
     w.blit(set_board, set_board_rect)
@@ -52,7 +54,7 @@ def draw_menu():
     w.blit(reset_board, reset_board_rect)
     w.blit(solve, solve_rect)
     w.blit(next_solution, next_solution_rect)
-    
+
 
 while run:
     w.fill((255, 255, 255))
@@ -120,7 +122,7 @@ while run:
                     w.fill((255, 255, 255))
         elif event.type == pygame.KEYDOWN:
             w.fill((255, 255, 255))
-            if tile.is_active:
+            if tile is not None and tile.is_active:
                 if event.key == pygame.K_BACKSPACE:
                     tile.set_number(0)
                     g.tile_clicked(mouse_pos, SCREENWIDTH)
